@@ -1,5 +1,5 @@
 App = {
-
+    loading: false,
     contracts: {},
 
     load: async () => {
@@ -8,6 +8,7 @@ App = {
         await App.loadAccount()
         await App.loadContract()
         await App.render()
+        web3.eth.defaultAccount = web3.eth.accounts[0]
     },
 
     // https://medium.com/metamask/https-medium-com-metamask-breaking-change-injecting-web3-7722797916a8
@@ -44,6 +45,7 @@ App = {
     },
 
     loadAccount: async () => {
+        // this was replaced, broke the code "web3.eth.accounts[0]"
         App.account = web3.eth.accounts[0]
     },
 
@@ -108,6 +110,13 @@ App = {
             // Show the task
             $newTaskTemplate.show()
         }
+    },
+
+    createTask: async () => {
+        App.setLoading(true)
+        const content = $('#newTask').val()
+        await App.todoList.createTask(content, { from: App.account })
+        window.location.reload()
     },
 
     setLoading: (boolean) => {
