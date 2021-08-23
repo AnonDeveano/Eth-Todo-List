@@ -15,6 +15,8 @@ contract TodoList {
 
     event TaskCreated(uint256 id, string content, bool completed);
 
+    event TaskCompleted(uint256 id, bool completed);
+
     constructor() public {
         createTask("Check out dappuniversity.com");
     }
@@ -23,5 +25,13 @@ contract TodoList {
         taskCount++;
         tasks[taskCount] = Task(taskCount, _content, false);
         emit TaskCreated(taskCount, _content, false);
+    }
+
+    function toggleCompleted(uint256 id) public {
+        // underscre means local variable, not state variable
+        Task memory _task = tasks[id];
+        _task.completed = !_task.completed;
+        tasks[id] = _task;
+        emit TaskCompleted(id, _task.completed);
     }
 }
